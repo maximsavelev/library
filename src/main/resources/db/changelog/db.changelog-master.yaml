@@ -1,0 +1,130 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Maxim Savelyev
+      changes:
+        - createTable:
+            tableName: country
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: country_pkey
+                  name: id
+                  autoIncrement: true
+                  type: BIGINT
+              - column:
+                  name: country_name
+                  type: varchar(30)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValue: now()
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValue: now()
+        - createTable:
+            tableName: genre
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: genre_pkey
+                  name: id
+                  autoIncrement: true
+                  type: BIGINT
+              - column:
+                  name: genre_name
+                  type: VARCHAR(255)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValue: now()
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValue: now()
+        - createTable:
+            tableName: author
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: author_pkey
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+              - column:
+                  name: firstname
+                  type: VARCHAR(255)
+              - column:
+                  name: lastname
+                  type: VARCHAR(255)
+              - column:
+                  name: birth_date
+                  type: date
+              - column:
+                  name: country_id
+                  constraints:
+                    referencedTableName: country
+                    referencedColumnNames: id
+                    foreignKeyName: country_fkey
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValue: now()
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValue: now()
+        - createTable:
+            tableName: book
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: book_pkey
+                  name: id
+                  type: SERIAL
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+              - column:
+                  name: count_of_pages
+                  type: INT
+              - column:
+                  name: publication_year
+                  type: varchar(4)
+              - column:
+                  name: isbn
+                  type: varchar(20)
+              - column:
+                  name: genre_id
+                  constraints:
+                    referencedTableName: genre
+                    referencedColumnNames: id
+                    foreignKeyName: genre_fkey
+                  type: BIGINT
+              - column:
+                  name: author_id
+                  constraints:
+                    referencedTableName: author
+                    referencedColumnNames: id
+                    foreignKeyName: author_fkey
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValue: now()
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValue: now()
+        - sqlFile:
+            path: migrations/V1__entity_initialization.sql
