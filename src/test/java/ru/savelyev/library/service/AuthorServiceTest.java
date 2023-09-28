@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.MessageSource;
 import ru.savelyev.library.exception.EntityNotFoundException;
 import ru.savelyev.library.exception.NoSuchResourceException;
 import ru.savelyev.library.model.Author;
@@ -15,7 +14,6 @@ import ru.savelyev.library.repository.AuthorRepository;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,7 +41,6 @@ public class AuthorServiceTest {
 
     @Test
     public void getAuthorById_throwException() {
-        ;
         Mockito.when(authorRepository.findById(id)).thenThrow(EntityNotFoundException.class);
         assertThrows(EntityNotFoundException.class,
                 () -> this.authorService.getAuthorById(id)
@@ -57,7 +54,6 @@ public class AuthorServiceTest {
     public void getAuthorByFirstNameAndLastName() {
         var firstName = "Don";
         var lastName = "Juan";
-        ;
         var author = Mockito.mock(Author.class);
         Optional<Author> optional = Optional.of(author);
         Mockito.when(authorRepository.findAuthorByFirstNameAndLastName(firstName, lastName))

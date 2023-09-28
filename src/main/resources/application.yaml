@@ -20,3 +20,9 @@ api:
 server:
   error:
     include-binding-errors: always
+
+spring:
+  messages:
+    basename: messages
+    always-use-message-format: false
+    fallback-to-system-locale: true

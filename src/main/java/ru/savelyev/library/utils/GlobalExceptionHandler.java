@@ -1,7 +1,9 @@
 package ru.savelyev.library.utils;
 
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -19,35 +21,38 @@ import ru.savelyev.library.exception.InvalidDataException;
 import ru.savelyev.library.exception.NoSuchResourceException;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 @ControllerAdvice
 @Slf4j
+@RequiredArgsConstructor
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    private final MessageSource messageSource;
+
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    public ErrorMessage handleNotFoundException(EntityNotFoundException e) {
-        log.error(e.getMessage(), e);
-        return new ErrorMessage(HttpStatus.NOT_FOUND.value(), e.getMessage());
+    public ErrorMessage handleInvalidDataException(EntityNotFoundException e) {
+        String message = getMessageByCode("error_not_found");
+        log.error(message, e);
+        return new ErrorMessage(HttpStatus.NOT_FOUND.value(), message);
     }
 
     @ExceptionHandler(InvalidDataException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorMessage handleNotFoundException(InvalidDataException e) {
-        log.error(e.getMessage(), e);
-        return new ErrorMessage(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+    public ErrorMessage handleInvalidDataException(InvalidDataException e) {
+        String message = getMessageByCode("error_country_not_found");
+        log.error(message, e);
+        return new ErrorMessage(HttpStatus.BAD_REQUEST.value(), message);
     }
 
     @ExceptionHandler(NoSuchResourceException.class)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ResponseBody
-    public ErrorMessage handleNoSuchResourceException (NoSuchResourceException e) {
-        log.error(e.getMessage(), e);
-        return new ErrorMessage(HttpStatus.NO_CONTENT.value(), e.getMessage());
+    public void handleNoSuchResourceException() {
     }
-
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
@@ -59,6 +64,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
         return handleExceptionInternal(ex, new ErrorMessage(HttpStatus.BAD_REQUEST.value(), errors.toString()),
-                new HttpHeaders(), HttpStatus.BAD_REQUEST , request);
+                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+    public String getMessageByCode(String code) {
+        return messageSource.getMessage(code, new Object[0], Locale.getDefault());
     }
 }

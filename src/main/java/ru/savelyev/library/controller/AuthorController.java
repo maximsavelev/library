@@ -12,7 +12,6 @@ import ru.savelyev.library.model.Author;
 import ru.savelyev.library.service.AuthorService;
 
 
-
 @RequestMapping("/api/authors")
 @RequiredArgsConstructor
 @RestController
@@ -40,16 +39,16 @@ public class AuthorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AuthorDTO> updateAuthor(@PathVariable Long id,@Valid @RequestBody AuthorDTO updatedAuthorDTO) {
+    public ResponseEntity<AuthorDTO> updateAuthor(@PathVariable Long id, @Valid @RequestBody AuthorDTO updatedAuthorDTO) {
         Author author = authorService.updateAuthor(id, authorMapper.mapToEntity(updatedAuthorDTO));
         AuthorDTO authorDTO = authorMapper.mapToDTO(author);
         return new ResponseEntity<>(authorDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteAuthor(@PathVariable Long id) {
         authorService.deleteAuthorById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

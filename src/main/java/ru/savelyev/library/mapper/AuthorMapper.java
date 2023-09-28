@@ -4,7 +4,6 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 import ru.savelyev.library.dto.AuthorDTO;
 import ru.savelyev.library.exception.InvalidDataException;
@@ -12,14 +11,11 @@ import ru.savelyev.library.model.Author;
 import ru.savelyev.library.model.Country;
 import ru.savelyev.library.service.CountryService;
 
-import java.util.Locale;
-
 @RequiredArgsConstructor
 @Component
 public class AuthorMapper {
     private final ModelMapper mapper;
     private final CountryService countryService;
-    private final MessageSource messageSource;
     @PostConstruct
     public void setupMapper() {
         mapper.typeMap(AuthorDTO.class, Author.class)
@@ -42,8 +38,7 @@ public class AuthorMapper {
             Country countryByName = countryService.findCountryByName(source.getCountry());
             destination.setCountry(countryByName);
         } catch (Exception e) {
-            throw new InvalidDataException(
-                    messageSource.getMessage("error_country_not_found", new Object[0], Locale.getDefault()));
+            throw new InvalidDataException();
         }
     }
     public Converter<AuthorDTO, Author> toEntityConverter() {
