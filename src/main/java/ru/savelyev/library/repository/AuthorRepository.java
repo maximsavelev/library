@@ -4,10 +4,13 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import ru.savelyev.library.model.Author;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AuthorRepository extends CrudRepository<Author,Long> {
-    Optional<Author> findAuthorByFirstNameAndLastName(String firstName,String lastName);
+public interface AuthorRepository extends CrudRepository<Author, Long> {
+    Optional<Author> findAuthorByFirstNameAndLastName(String firstName, String lastName);
+
+    List<Author> findAll();
 
 }

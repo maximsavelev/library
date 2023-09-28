@@ -3,6 +3,6 @@ package ru.savelyev.library.dto;
 import lombok.Data;
 
 @Data
-public class CountryDto {
+public class CountryDTO {
     private String countryName;
 }

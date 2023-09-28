@@ -1,0 +1,22 @@
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui
+    filter: true
+
+api:
+  dev:
+    url: http://localhost:8080
+  description: This is simple REST API
+  title: Library API
+  version: 1.0
+  developer:
+    name: Maxim Savelyev
+    mail: mrmaximax24@yandex.ru
+  server:
+    name: Test server
+
+server:
+  error:
+    include-binding-errors: always
