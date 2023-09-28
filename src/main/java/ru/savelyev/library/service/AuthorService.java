@@ -8,39 +8,24 @@ import ru.savelyev.library.exception.NoSuchResourceException;
 import ru.savelyev.library.model.Author;
 import ru.savelyev.library.repository.AuthorRepository;
 
-import java.util.List;
-import java.util.Locale;
-
 @Service
 @RequiredArgsConstructor
 public class AuthorService {
     private final AuthorRepository authorRepository;
 
-    private final MessageSource messageSource;
-
     public Author createAuthor(Author author) {
         return authorRepository.save(author);
     }
 
-    public List<Author> getAllAuthors() {
-        return authorRepository.findAll();
-    }
-
     public Author getAuthorById(Long id) {
         return authorRepository.findById(id)
-                .orElseThrow(
-                        () -> new EntityNotFoundException
-                                (messageSource.getMessage("error_not_found", new Object[0], Locale.getDefault()))
-                );
+                .orElseThrow(EntityNotFoundException::new);
     }
 
 
     public Author getAuthorByFirstNameAndLastName(String firstName, String lastName) {
         return authorRepository.findAuthorByFirstNameAndLastName(firstName, lastName)
-                .orElseThrow(
-                        () -> new EntityNotFoundException
-                                (messageSource.getMessage("error_not_found", new Object[0], Locale.getDefault()))
-                );
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     public Author updateAuthor(Long id, Author updatedAuthor) {
@@ -49,12 +34,11 @@ public class AuthorService {
         return authorRepository.save(authorById);
     }
 
-    public void deleteAuthor(Long id) {
+    public void deleteAuthorById(Long id) {
         if (authorRepository.existsById(id)) {
             authorRepository.deleteById(id);
         } else {
-            throw new NoSuchResourceException(
-                    messageSource.getMessage("error_not_found", new Object[0], Locale.getDefault()));
+            throw new NoSuchResourceException();
         }
     }
 
